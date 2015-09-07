@@ -24,12 +24,6 @@ function sendCommandToArduino(command) {
         console.log('data received: ' + data);
       });
 
-      serialPort.on('close', function(data) {
-        //serialData += data;
-        console.log('closed connection');
-      });
-
-
       serialPort.write(command + '\n', function(err, results) {
         if (err) {
           console.log('err ' + err);
@@ -59,7 +53,7 @@ app.post('/command', function(req, res) {
     res.json({success: true});
   }
 
-  if (action === 'color' || action === 'colorWipe' || action === 'theaterChase' ) {
+  if (['color', 'colorWipe', 'theaterChase'].indexOf(action) != -1 ) {
     sendColorCommand(action, color);
     res.json({success: true});
   }
