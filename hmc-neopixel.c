@@ -46,8 +46,8 @@ void setup() {
 
   red = green = blue = 0;
 
-  Serial.println("Welcome to NEOPIXEL! Please tell me what to do!!");
-  Serial.println(activeProgram);
+//  Serial.println("Welcome to NEOPIXEL! Please tell me what to do!!");
+//  Serial.println(activeProgram);
 
   strip.begin();
   strip.show(); // Initialize all pixels to 'off'
@@ -57,15 +57,10 @@ void parseColors(String colorString) {
   red   = (byte) getValue(colorString, ' ', 1).toInt();
   green = (byte) getValue(colorString, ' ', 2).toInt();
   blue   = (byte) getValue(colorString, ' ', 3).toInt();
-//  Serial.println("Parsed the following colors: ");
-//  Serial.println(red);
-//  Serial.println(green);
-//  Serial.println(blue);
 }
 
 void parseCommands() {
    if (stringComplete) {
-    //Serial.println("Recieved: " + inputString); 
 
     if (inputString == "on")  { active = true; }
     if (inputString == "off") { active = false; }

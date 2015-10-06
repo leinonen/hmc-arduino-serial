@@ -10,33 +10,38 @@ module.exports = function() {
     parser: serialport.parsers.readline('\n')
   }, false); // do not open automagically
 
-  function sendCommandToArduino(command) {
+  var sendCommandToArduino = function(command, callback) {
+    var responseList = [];
     serialPort.open(function(error) {
-      var serialData = '';
       if (error) {
-        console.log('failed to open: ' + error);
+        callback(error, null);
+
       } else {
-        console.log('open');
+
         serialPort.on('data', function(data) {
-          console.log('data received: ' + data);
+          responseList.push(data);
+        });
+
+        serialPort.on('end', function() {
+          console.log('end');
+          callback(null, responseList);
         });
 
         serialPort.write(command + '\n', function(err, results) {
-          if (err) {
-            console.log('err ' + err);
-          }
-          console.log('results ' + results);
+          callback(err, results);
         });
       }
     });
-  }
+  };
 
-  function sendColorCommand(cmd, color) {
-    sendCommandToArduino(cmd + ' ' + color.red + ' ' + color.green + ' ' + color.blue);
-  }
+  var sendColorCommand = function(cmd, color, callback) {
+    var colorCmd = cmd + ' ' + color.red + ' ' + color.green + ' ' + color.blue;
+    sendCommandToArduino(colorCmd, callback);
+  };
 
   return {
-    sendColorCommand: sendColorCommand
+    send: sendCommandToArduino,
+    sendColor: sendColorCommand
   };
 
 };
